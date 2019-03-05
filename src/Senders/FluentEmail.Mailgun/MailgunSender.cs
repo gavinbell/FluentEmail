@@ -91,6 +91,11 @@ namespace FluentEmail.Mailgun
                 parameters.Add(new KeyValuePair<string, string>(key, emailHeader.Value));   
             }
 
+            foreach (var param in email.Data.Params)
+            {
+                parameters.Add(new KeyValuePair<string, string>(param.Key, param.Value));
+            }
+
             var files = new List<HttpFile>();
             email.Data.Attachments.ForEach(x =>
             {
@@ -112,11 +117,15 @@ namespace FluentEmail.Mailgun
 
             var response = await _httpClient.PostMultipart<MailgunResponse>("messages", parameters, files).ConfigureAwait(false);
 
-            var result = new SendResponse {MessageId = response.Data.Id};
+            var result = new SendResponse();
             if (!response.Success)
             {
                 result.ErrorMessages.AddRange(response.Errors.Select(x => x.ErrorMessage));
                 return result;
+            }
+            else
+            {
+                result.MessageId = response.Data.Id;
             }
             
             return result;

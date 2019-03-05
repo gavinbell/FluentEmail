@@ -485,9 +485,28 @@ namespace FluentEmail.Core
             return this;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="header"></param>
+        /// <param name="body"></param>
+        /// <returns></returns>
         public IFluentEmail Header(string header, string body)
         {
             Data.Headers.Add(header, body);
+
+            return this;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="header"></param>
+        /// <param name="body"></param>
+        /// <returns></returns>
+        public IFluentEmail Param(string key, string value)
+        {
+            Data.Params.Add(key, value);
 
             return this;
         }
